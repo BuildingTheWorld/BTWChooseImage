@@ -112,14 +112,18 @@ static NSString * const kCSChooseImageCellID = @"kCSChooseImageCellID";
 {
     _remoteItemArray = remoteItemArray;
     
-    [remoteItemArray enumerateObjectsUsingBlock:^(BTWChooseImageItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    NSRange removeRange = NSMakeRange(0, self.modelArray.count - 1);
+    [self.modelArray removeObjectsInRange:removeRange];
+    
+    [remoteItemArray enumerateObjectsUsingBlock:^(CSChooseImageItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         
-        obj.itemImageType = BTWCIImageTypeRemote;
+        obj.itemImageType = CSCIImageTypeRemote;
     }];
     
-    NSRange tempRange = NSMakeRange(self.modelArray.count - 1, remoteItemArray.count);
-    NSIndexSet *tempIndexSet = [NSIndexSet indexSetWithIndexesInRange:tempRange];
-    [self.modelArray insertObjects:remoteItemArray atIndexes:tempIndexSet]; // ---core---
+    NSRange addItemRange = NSMakeRange(self.modelArray.count - 1, remoteItemArray.count);
+    NSIndexSet *addItemIndexSet = [NSIndexSet indexSetWithIndexesInRange:addItemRange];
+    
+    [self.modelArray insertObjects:remoteItemArray atIndexes:addItemIndexSet]; // ---core---
     
     [self.chooseImageCollectionView reloadData];
 }
